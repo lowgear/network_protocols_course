@@ -1,0 +1,358 @@
+=======================================================
+R1AR0:
+
+Router>en
+Router#conf t
+
+Router(config)#interface fa 0/0
+Router(config-if)#ip add 10.2.2.1 255.255.255.0
+Router(config-if)#no shutdown 
+Router(config-if)#exit
+
+Router(config)#interface se 2/0
+Router(config-if)#ip add 10.1.1.1 255.255.255.0
+Router(config-if)#no shutdown 
+Router(config-if)#exit
+
+Router(config)#router ospf 1
+Router(config-router)#net 10.1.1.0 0.0.0.255 area 0
+Router(config-router)#net 10.2.2.0 0.0.0.255 area 0
+Router(config-router)#exit
+
+Router(config)#exit
+
+Router#show ip route
+Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     10.0.0.0/8 is variably subnetted, 6 subnets, 2 masks
+C       10.1.1.0/24 is directly connected, Serial2/0
+C       10.2.2.0/24 is directly connected, FastEthernet0/0
+O       10.14.0.1/32 [110/2] via 10.2.2.2, 00:00:03, FastEthernet0/0
+O       10.14.1.1/32 [110/2] via 10.2.2.2, 00:00:03, FastEthernet0/0
+O       10.14.2.1/32 [110/2] via 10.2.2.2, 00:00:03, FastEthernet0/0
+O       10.14.3.1/32 [110/2] via 10.2.2.2, 00:00:03, FastEthernet0/0
+
+Router#show ip ospf database router 
+
+            OSPF Router with ID (10.2.2.1) (Process ID 1)
+
+                Router Link States (Area 0)
+
+  LS age: 411
+  Options: (No TOS-capability, DC)
+  LS Type: Router Links
+  Link State ID: 10.2.2.1
+  Advertising Router: 10.2.2.1
+  LS Seq Number: 80000004
+  Checksum: 0xac46
+  Length: 60
+  Number of Links: 3
+
+    Link connected to: another Router (point-to-point)
+     (Link ID) Neighboring Router ID: 192.168.1.1
+     (Link Data) Router Interface address: 10.1.1.1
+      Number of TOS metrics: 0
+       TOS 0 Metrics: 64
+
+    Link connected to: a Stub Network
+     (Link ID) Network/subnet number: 10.1.1.0
+     (Link Data) Network Mask: 255.255.255.0
+      Number of TOS metrics: 0
+       TOS 0 Metrics: 64
+
+    Link connected to: a Transit Network
+     (Link ID) Designated Router address: 10.2.2.1
+     (Link Data) Router Interface address: 10.2.2.1
+      Number of TOS metrics: 0
+       TOS 0 Metrics: 1
+
+  LS age: 411
+  Options: (No TOS-capability, DC)
+  LS Type: Router Links
+  Link State ID: 192.168.1.1
+  Advertising Router: 192.168.1.1
+  LS Seq Number: 80000002
+  Checksum: 0x6263
+  Length: 48
+  Number of Links: 2
+
+    Link connected to: another Router (point-to-point)
+     (Link ID) Neighboring Router ID: 10.2.2.1
+     (Link Data) Router Interface address: 10.1.1.2
+      Number of TOS metrics: 0
+       TOS 0 Metrics: 64
+
+    Link connected to: a Stub Network
+     (Link ID) Network/subnet number: 10.1.1.0
+     (Link Data) Network Mask: 255.255.255.0
+      Number of TOS metrics: 0
+       TOS 0 Metrics: 64
+
+  LS age: 118
+  Options: (No TOS-capability, DC)
+  LS Type: Router Links
+  Link State ID: 10.14.3.1
+  Advertising Router: 10.14.3.1
+  LS Seq Number: 80000006
+  Checksum: 0x1a30
+  Length: 84
+  Number of Links: 5
+
+    Link connected to: a Transit Network
+     (Link ID) Designated Router address: 10.2.2.1
+     (Link Data) Router Interface address: 10.2.2.2
+      Number of TOS metrics: 0
+       TOS 0 Metrics: 1
+
+    Link connected to: a Stub Network
+     (Link ID) Network/subnet number: 10.14.0.1
+     (Link Data) Network Mask: 255.255.255.255
+      Number of TOS metrics: 0
+       TOS 0 Metrics: 1
+
+    Link connected to: a Stub Network
+     (Link ID) Network/subnet number: 10.14.1.1
+     (Link Data) Network Mask: 255.255.255.255
+      Number of TOS metrics: 0
+       TOS 0 Metrics: 1
+
+    Link connected to: a Stub Network
+     (Link ID) Network/subnet number: 10.14.2.1
+     (Link Data) Network Mask: 255.255.255.255
+      Number of TOS metrics: 0
+       TOS 0 Metrics: 1
+
+    Link connected to: a Stub Network
+     (Link ID) Network/subnet number: 10.14.3.1
+     (Link Data) Network Mask: 255.255.255.255
+      Number of TOS metrics: 0
+       TOS 0 Metrics: 1
+	   
+Router#show ip os dat net
+
+            OSPF Router with ID (10.2.2.1) (Process ID 1)
+
+                Net Link States (Area 0)
+
+  Routing Bit Set on this LSA
+  LS age: 773
+  Options: (No TOS-capability, DC)
+  LS Type: Network Links
+  Link State ID: 10.2.2.1  (address of Designated Router)
+  Advertising Router: 10.2.2.1
+  LS Seq Number: 80000001
+  Checksum: 0x44ce
+  Length: 32
+  Network Mask: /24
+        Attached Router: 10.14.3.1
+        Attached Router: 10.2.2.1
+		
+Router#show ip rout
+Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     10.0.0.0/8 is variably subnetted, 6 subnets, 2 masks
+C       10.1.1.0/24 is directly connected, Serial2/0
+C       10.2.2.0/24 is directly connected, FastEthernet0/0
+O       10.14.0.1/32 [110/2] via 10.2.2.2, 01:14:34, FastEthernet0/0
+O       10.14.1.1/32 [110/2] via 10.2.2.2, 01:14:34, FastEthernet0/0
+O       10.14.2.1/32 [110/2] via 10.2.2.2, 01:14:34, FastEthernet0/0
+O       10.14.3.1/32 [110/2] via 10.2.2.2, 01:14:34, FastEthernet0/0
+O IA 192.168.1.0/24 [110/128] via 10.1.1.2, 00:00:41, Serial2/0
+O IA 192.168.2.0/24 [110/192] via 10.1.1.2, 00:00:41, Serial2/0
+
+Router#show ip route
+Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     10.0.0.0/8 is variably subnetted, 6 subnets, 2 masks
+C       10.1.1.0/24 is directly connected, Serial2/0
+C       10.2.2.0/24 is directly connected, FastEthernet0/0
+O       10.14.0.1/32 [110/2] via 10.2.2.2, 01:32:08, FastEthernet0/0
+O       10.14.1.1/32 [110/2] via 10.2.2.2, 01:32:08, FastEthernet0/0
+O       10.14.2.1/32 [110/2] via 10.2.2.2, 01:32:08, FastEthernet0/0
+O       10.14.3.1/32 [110/2] via 10.2.2.2, 01:32:08, FastEthernet0/0
+O IA 192.168.1.0/24 [110/128] via 10.1.1.2, 00:18:15, Serial2/0
+O IA 192.168.2.0/24 [110/192] via 10.1.1.2, 00:18:15, Serial2/0
+     200.0.0.0/30 is subnetted, 1 subnets
+O E2    200.0.0.0 [110/20] via 10.2.2.2, 00:00:35, FastEthernet0/0
+
+=======================================================
+R2AR0:
+
+Router>en
+Router#conf t
+
+Router(config)#int fa 0/0
+Router(config-if)#ip add 10.2.2.2 255.255.255.0
+Router(config-if)#no sh
+Router(config-if)#exit
+
+Router(config)#int se 2/0
+Router(config-if)#ip add 10.3.3.1 255.255.255.0
+Router(config-if)#no sh
+Router(config-if)#exit
+
+Router(config)#int lo 0
+Router(config-if)#ip add 10.14.0.1 255.255.255.255
+Router(config-if)#exit
+
+Router(config)#int lo 1
+Router(config-if)#ip add 10.14.1.1 255.255.255.255
+Router(config-if)#exit
+
+Router(config)#int lo 2
+Router(config-if)#ip add 10.14.2.1 255.255.255.255
+Router(config-if)#exit
+
+Router(config)#int lo 3
+Router(config-if)#ip add 10.14.3.1 255.255.255.255
+Router(config-if)#exit
+
+Router(config)#rou os 1
+Router(config-router)#net 10.2.2.0 0.0.0.255 ar 0
+Router(config-router)#net 10.14.0.0 0.0.255.255 ar 0
+Router(config-router)#exit
+
+Router(config)#int se 2/0
+Router(config-if)#ip add 200.0.0.2 255.255.255.252
+Router(config-if)#no sh
+Router(config-if)#exit
+
+Router(config)#rou ri
+Router(config-router)#net 200.0.0.0
+Router(config-router)#exit
+
+Router(config)#rou os 1
+Router(config-router)#redistribute rip subnets 
+Router(config-router)#exit
+
+=======================================================
+ABR:
+
+Router>en
+Router#conf t
+
+Router(config)#int se 2/0
+Router(config-if)#ip add 10.1.1.2 255.255.255.0
+Router(config-if)#no sh
+Router(config-if)#exit
+	
+Router(config)#int se 3/0
+Router(config-if)#ip add 192.168.1.1 255.255.255.0
+Router(config-if)#no sh
+Router(config-if)#exit
+
+Router(config)#rou os 1
+Router(config-router)#net 10.0.0.0 0.255.255.255 ar 0
+Router(config-router)#exit
+
+Router(config)#rou os 1
+Router(config-router)#net 192.168.0.0 0.0.255.255 ar 1
+Router(config-router)#exit
+
+Router(config)#rout os 1
+Router(config-router)#area 1 stub
+Router(config-router)#exit
+
+=======================================================
+R1AR1:
+
+Router>en
+Router#conf t
+
+Router(config)#int se 2/0
+Router(config-if)#ip add 192.168.1.2 255.255.255.0
+Router(config-if)#no sh
+Router(config-if)#exit
+
+Router(config)#int se 3/0
+Router(config-if)#ip add 192.168.2.1 255.255.255.0
+Router(config-if)#no sh
+Router(config-if)#exit
+
+Router(config)#rou os 1
+Router(config-router)#router-id 3.3.3.3
+Router(config-router)#net 192.168.0.0 0.0.255.255 ar 1
+Router(config-router)#exit
+
+Router(config)#rout os 1
+Router(config-router)#area 1 stub
+Router(config-router)#exit
+
+=======================================================
+ASBR:
+
+Router>en
+Router#conf t
+Router(config)#int se 2/0
+Router(config-if)#ip add 192.168.2.2 255.255.255.0
+Router(config-if)#no sh
+
+%LINK-5-CHANGED: Interface Serial2/0, changed state to down
+Router(config-if)#exit
+
+Router(config)#ip route 1.0.0.0 255.0.0.0 null0
+Router(config)#ip route 2.0.0.0 255.0.0.0 null0
+Router(config)#ip route 3.0.0.0 255.0.0.0 null0
+
+Router(config)#rout os 1
+Router(config-router)#router-id 4.4.4.4
+Router(config-router)#net 192.168.1.0 0.0.0.255 ar 1
+Router(config-router)#exit
+
+Router(config)#rout os 1
+Router(config-router)#area 1 stub
+Router(config-router)#exit
+
+=======================================================
+RTRRIP:
+
+Router>enable
+Router#configure terminal
+
+Router(config)#int lo 0
+Router(config-if)#ip add 172.20.0.1 255.255.255.0
+Router(config-if)#exit
+
+Router(config)#int lo 1
+Router(config-if)#ip add 172.20.1.1 255.255.255.0
+Router(config-if)#exit
+
+Router(config)#int lo 2
+Router(config-if)#ip add 172.20.2.1 255.255.255.0
+Router(config-if)#exit
+
+Router(config)#int se 2/0
+Router(config-if)#ip add 200.0.0.1 255.255.255.252
+Router(config-if)#no sh
+
+%LINK-5-CHANGED: Interface Serial2/0, changed state to down
+Router(config-if)#exit
+
+Router(config)#rout rip 
+Router(config-router)#net 172.20.0.0
+Router(config-router)#net 172.20.1.0
+Router(config-router)#net 172.20.2.0

@@ -1,0 +1,30 @@
+Router>en	
+Router#conf t
+
+Router(config)#interface se 2/0
+Router(config-if)#ip address 192.168.0.6 255.255.255.252
+Router(config-if)#no shutdown 
+Router(config-if)#exit
+
+Router(config)#interface se 3/0
+Router(config-if)#ip address 192.168.0.10 255.255.255.252
+Router(config-if)#no shutdown 
+Router(config-if)#exit
+
+Router(config)#interface fa 0/0
+Router(config-if)#ip address 172.16.0.33 255.255.255.248
+Router(config-if)#no shutdown 
+Router(config-if)#exit
+
+Router(config)#router ospf 1
+Router(config-router)#network 172.16.0.32 0.0.0.7 area 0
+Router(config-router)#network 192.168.0.4 0.0.0.3 area 0
+Router(config-router)#network 192.168.0.4 0.0.0.3 area 0
+Router(config-router)#exit
+
+Router(config)#interface loopback 0
+Router(config-if)#ip address 10.10.2.2 255.255.255.255
+Router(config-if)#exit
+Router(config)#exit
+
+Router#write memory 
